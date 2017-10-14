@@ -1,0 +1,26 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fl_flower_layout"
+    tools:context="layout.FlowerFragment">
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.melonfishy.florabeats.RhythmPlantActivity"
+        android:id="@+id/cl_rhythm_plant"/>
+
+    <ProgressBar
+        android:id="@+id/pb_flower"
+        android:background="@drawable/flora1_lv2"
+        android:indeterminate="false"
+        android:indeterminateOnly="false"
+        android:layout_gravity="center"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:progressDrawable="@drawable/circular_progressbar"/>
+
+</FrameLayout>

@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Florabeats</string>
+
+    <string name="bloom_combo">BLOOM!</string>
+    <string name="grow_combo">GROW</string>
+    <string name="miss_combo">MISS</string>
+    <string name="score_combo">SCORE</string>
+    <string name="max_combo">MAX COMBO</string>
+    <string name="rhythm_ready">READY?</string>
+    <string name="rhythm_loading">LOADING…</string>
+    <string name="rhythm_combo">0</string>
+    <string name="rhythm_label">GROW</string>
+    <string name="rhythm_difficulty_songname">Morning Sprout</string>
+    <string name="rhythm_pause_label">PAUSED</string>
+    <string name="rhythm_clear_results_label">RESULTS</string>
+    <string name="rhythm_clear_normal">SONG CLEAR!</string>
+    <string name="rhythm_clear_fail">SONG FAILED...</string>
+    <string name="rhythm_clear_grow">FULL GROW!!</string>
+    <string name="rhythm_clear_bloom">FULL BLOOM!!!</string>
+    <string name="rhythm_clear_results_data">100</string>
+    <string name="rhythm_clear_continue_message">-TAP TO CONTINUE-</string>
+
+</resources>
