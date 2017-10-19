@@ -30,6 +30,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -398,11 +400,11 @@ public class RhythmPlantActivity extends AppCompatActivity {
                 }
             }
             fxLayer2.addView(newView);
-            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(context,
-                    R.animator.spark_burst);
-            set.setDuration(millisFromBPM(240));
-            set.setTarget(newView);
-            set.addListener(new Animator.AnimatorListener() {
+            newView.setScaleX(0.45f);
+            newView.setScaleY(0.45f);
+            newView.animate().alpha(0.5f).scaleX(1.5f).scaleY(1.5f)
+                    .setInterpolator(new DecelerateInterpolator())
+            .setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animator) {
                     newView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -429,7 +431,6 @@ public class RhythmPlantActivity extends AppCompatActivity {
 
                 }
             });
-            set.start();
         }
     }
 
@@ -481,40 +482,35 @@ public class RhythmPlantActivity extends AppCompatActivity {
                 newView.setImageTintList(ContextCompat.getColorStateList(context, R.color.colorSignal1));
             }
             fxLayer.addView(newView);
-            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(context,
-                    R.animator.signal_shrink);
-            set.setDuration(millisFromBPM(BPM, 2.3));
-            set.setTarget(newView);
+            newView.setScaleX(3.2f);
+            newView.setScaleY(3.2f);
+            newView.setAlpha(0f);
             flag_signal = timing_signal > timing_miss;
-            set.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animator) {
-                    newView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animator) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animator) {
-                    if (flag_signal || AUTO_ASSIST) {
-//                        Log.d(RhythmPlantActivity.class.getSimpleName(), "fxLayer size: " + fxLayer.getChildCount());
-                        fxLayer.removeView(newView);
-                    }
-                    newView.post(new Runnable() {
+            newView.animate().setDuration(millisFromBPM(BPM, 2.3))
+                    .scaleX(0f).scaleY(0f).alpha(1)
+                    .setListener(new Animator.AnimatorListener() {
                         @Override
-                        public void run() {
-                            newView.setLayerType(View.LAYER_TYPE_NONE, null);
+                        public void onAnimationStart(Animator animator) {
+                            newView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                         }
-                    });
-                }
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
+                        @Override
+                        public void onAnimationCancel(Animator animator) {
+                        }
 
-                }
-            });
+                        @Override
+                        public void onAnimationEnd(Animator animator) {
+                            if (flag_signal || AUTO_ASSIST) {
+//                              Log.d(RhythmPlantActivity.class.getSimpleName(), "fxLayer size: " + fxLayer.getChildCount());
+                                fxLayer.removeView(newView);
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    }).setInterpolator(new LinearInterpolator());
             if (AUTO_ASSIST) {
                 AnimatorSet set2 = (AnimatorSet) AnimatorInflater.loadAnimator(context,
                         R.animator.do_nothing);
@@ -555,11 +551,11 @@ public class RhythmPlantActivity extends AppCompatActivity {
                 set3.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
-                        flag_judge = fragmentStepBindings.get(nodeID).contains(origin);
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
+                        flag_judge = fragmentStepBindings.get(nodeID).contains(origin);
                         try {
                             if (flag_judge) {
                                 judge(nodeFragmentBindings.get(mPlant.getNode(nodeID)), false,
@@ -585,7 +581,6 @@ public class RhythmPlantActivity extends AppCompatActivity {
                 });
                 set3.start();
             }
-            set.start();
 
             super.onPostExecute(objects);
         }
@@ -1024,8 +1019,10 @@ public class RhythmPlantActivity extends AppCompatActivity {
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                Log.d("RhythmPlantActivity", "STARTED DEBUGGING! 1");
                 final FrameLayout loadingScreen = (FrameLayout)
                         RhythmPlantActivity.this.findViewById(R.id.fl_flower_loading);
+                Log.d("RhythmPlantActivity", "STARTED DEBUGGING! 2");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1056,6 +1053,7 @@ public class RhythmPlantActivity extends AppCompatActivity {
                         });
                     }
                 });
+                Log.d("RhythmPlantActivity", "STARTED DEBUGGING! 3");
             }
         }, LOADING_OFFSET_TIME);
         mTimer.schedule(new TimerTask() {
@@ -1110,14 +1108,14 @@ public class RhythmPlantActivity extends AppCompatActivity {
             }
             if (step.getNotes().size() > 0) {
                 if (AUTO_ASSIST) {
-                    sfxTimers.get(sfxIndex).schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-//                            new HitSoundTask().execute();
-                        }
-                    }, Math.round(LOADING_OFFSET_TIME
-                            + step.getStartTime()) + millisFromBPM(step.getBpm(), 2.25));
-                    sfxIndex = (sfxIndex + 1) % sfxTimers.size();
+//                    sfxTimers.get(sfxIndex).schedule(new TimerTask() {
+//                        @Override
+//                        public void run() {
+////                            new HitSoundTask().execute();
+//                        }
+//                    }, Math.round(LOADING_OFFSET_TIME
+//                            + step.getStartTime()) + millisFromBPM(step.getBpm(), 2.25));
+//                    sfxIndex = (sfxIndex + 1) % sfxTimers.size();
                 }
                 mTimer.schedule(new TimerTask() {
                     @Override

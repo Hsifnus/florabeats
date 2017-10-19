@@ -1,5 +1,6 @@
 package layout;
 
+import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Context;
@@ -64,60 +65,6 @@ public class FlowerFragment extends Fragment {
                 pb = (ProgressBar) params[0];
                 mode = (Integer) params[1];
                 checkForBloom = (Boolean) params[2];
-
-                if (mode == PULSE) {
-                    mTimer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            try {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            pb.setScaleX(1);
-                                            pb.setScaleY(1);
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                                pb.setBackgroundTintList(null);
-                                                pb.getProgressDrawable().setTint(ContextCompat.getColor
-                                                        (getActivity(), R.color.colorHealthAccent));
-                                            }
-                                        } catch (NullPointerException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-                            } catch (NullPointerException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, 90);
-                } else {
-                    mTimer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            try {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            pb.setScaleX(1);
-                                            pb.setScaleY(1);
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                                pb.setBackgroundTintList(null);
-                                                pb.getProgressDrawable().setTint(ContextCompat.getColor
-                                                        (getActivity(), R.color.colorHealthAccent));
-                                            }
-                                        } catch (NullPointerException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-                            } catch (NullPointerException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, 30);
-                }
             } catch (Exception e) {
                 return new Object[0];
             }
@@ -133,9 +80,65 @@ public class FlowerFragment extends Fragment {
                 if (mode == PULSE) {
                     pb.setScaleX(1.1f);
                     pb.setScaleY(1.1f);
+                    pb.animate().scaleX(1f).scaleY(1f).setDuration(90)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            try {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    pb.setBackgroundTintList(null);
+                                    pb.getProgressDrawable().setTint(ContextCompat.getColor
+                                            (getActivity(), R.color.colorHealthAccent));
+                                }
+                            } catch (Exception e) {
+                                pb.clearAnimation();
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
                 } else {
                     pb.setScaleX(1.2f);
                     pb.setScaleY(1.2f);
+                    pb.animate().scaleX(1f).scaleY(1f).setDuration(30)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                pb.setBackgroundTintList(null);
+                                pb.getProgressDrawable().setTint(ContextCompat.getColor
+                                        (getActivity(), R.color.colorHealthAccent));
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
                 }
                 if (health >= LEVEL_5_THRESHOLD) {
                     pb.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.flora1_lv5));
@@ -175,7 +178,7 @@ public class FlowerFragment extends Fragment {
                     }
                 }
                 super.onPostExecute(objects);
-            } catch (NullPointerException e) {
+            } catch (Exception e) {
                 this.cancel(true);
             }
         }

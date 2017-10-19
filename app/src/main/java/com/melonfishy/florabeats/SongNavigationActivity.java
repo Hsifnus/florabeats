@@ -53,7 +53,7 @@ public class SongNavigationActivity extends AppCompatActivity {
         mFlower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSong("001_morning_sprout_F.txt");
+                startSong("015_rocket_to_the_cosmos_F.txt");
             }
         });
 

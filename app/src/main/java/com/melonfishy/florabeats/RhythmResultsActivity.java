@@ -194,10 +194,12 @@ public class RhythmResultsActivity extends AppCompatActivity {
         mWholeFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RhythmResultsActivity.this,
-                        SongNavigationActivity.class);
-                startActivity(intent);
-                finish();
+                if (animFinished) {
+                    Intent intent = new Intent(RhythmResultsActivity.this,
+                            SongNavigationActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }
@@ -211,8 +213,10 @@ public class RhythmResultsActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mPlayer.pause();
-        length = mPlayer.getCurrentPosition();
+        if (mPlayer.isPlaying()) {
+            mPlayer.pause();
+            length = mPlayer.getCurrentPosition();
+        }
     }
 
     private int getCurrentSong() {
